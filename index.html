@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movidoz - Free Movie Streaming</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Hide header dynamically on watch pages */
+        body.watch-mode .site-header {
+            display: none;
+        }
+        /* Styling for the batch loading indicator */
+        .load-more-status {
+            text-align: center;
+            padding: 20px;
+            color: #777777;
+            font-size: 14px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section (Hidden on watch pages) -->
+    <header class="site-header">
+        <div class="header-container">
+            <a href="index.html" class="site-logo">Movidoz</a>
+            <div id="searchbox">
+                <input type="text" id="search-input" placeholder="Search movies...">
+                <button id="button-submit" aria-label="Search">🔍</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container" id="main-content-container">
+        <!-- Dynamic Content injected via JS -->
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-disclaimer">
+                Disclaimer: This site does not host any files on its servers. All contents are provided by non-affiliated third parties.
+            </div>
+            <div class="footer-copyright">
+                &copy; 2026 Movidoz. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Load Movie Database -->
+    <script src="movies.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const container = document.getElementById("main-content-container");
+            const urlParams = new URLSearchParams(window.location.search);
+            const movieParam = urlParams.get("movie");
+            const showParam = urlParams.get("show");
+
+            // Function to render the Home/Grid view (shows max 10 movies + View All button)
+            function renderHome(filterQuery = "") {
+                document.body.classList.remove("watch-mode");
+                let html = `
+                    <h2 class="section-title">Latest Releases</h2>
+                    <div class="post-grid" id="movie-grid">
+                `;
+
+                // Filter movies based on search input
+                let filteredMovies = movies.filter(movie => {
+                    if (!filterQuery) return true;
+                    return movie.title.toLowerCase().includes(filterQuery.toLowerCase()) || 
+                           movie.categories.some(cat => cat.toLowerCase().includes(filterQuery.toLowerCase()));
+                });
+
+                // Limit the displayed movies to a maximum of 10 for the homepage
+                let limitedMovies = filteredMovies.slice(0, 10);
+
+                limitedMovies.forEach((movie) => {
+                    let originalIndex = movies.indexOf(movie);
+
+                    html += `
+                        <a href="?movie=${originalIndex}" class="horizontal-post">
+                            <div class="thumbnail-container">
+                                <img src="${movie.thumbnail}" alt="${movie.title}" class="thumb-image" onerror="this.src='https://via.placeholder.com/320x180?text=No+Image'">
+                            </div>
+                        </a>
+                    `;
+                });
+
+                html += `</div>`;
+
+                // Show "View All" button only if there are more than 10 movies and no active search query
+                if (!filterQuery && movies.length > 10) {
+                    html += `
+                        <div class="view-all-container">
+                            <a href="?show=all-movies">
+                                <button class="btn-view-all">View All</button>
+                            </a>
+                        </div>
+                    `;
+                }
+
+                container.innerHTML = html;
+
+                // Re-bind search input event listener after re-rendering home grid
+                const searchInput = document.getElementById("search-input");
+                if (searchInput) {
+                    searchInput.addEventListener("input", (e) => {
+                        renderHome(e.target.value.trim());
+                    });
+                }
+            }
+
+            // Function to render the "All Movies" page in random order with batch lazy-loading
+            function renderAllMoviesBatched() {
+                document.body.classList.remove("watch-mode");
+                
+                container.innerHTML = `
+                    <a href="index.html" class="back-link">&larr; Back to Home</a>
+                    <h2 class="section-title">All Movies</h2>
+                    <div class="post-grid" id="all-movie-grid"></div>
+                    <div id="load-status" class="load-more-status">Loading movies...</div>
+                `;
+
+                const gridContainer = document.getElementById("all-movie-grid");
+                const loadStatus = document.getElementById("load-status");
+                
+                // Map movies with their original indices and shuffle them randomly
+                let shuffledMovies = movies.map((movie, originalIndex) => ({ movie, originalIndex }));
+                for (let i = shuffledMovies.length - 1; i > 0; i--) {
+                    let j = Math.floor(Math.random() * (i + 1));
+                    [shuffledMovies[i], shuffledMovies[j]] = [shuffledMovies[j], shuffledMovies[i]];
+                }
+
+                let currentIndex = 0;
+                const batchSize = 20; // Number of movies to load per batch
+
+                function loadNextBatch() {
+                    if (currentIndex >= shuffledMovies.length) {
+                        loadStatus.textContent = "All movies loaded.";
+                        return;
+                    }
+
+                    let nextBatchEnd = Math.min(currentIndex + batchSize, shuffledMovies.length);
+                    let batchHtml = "";
+
+                    for (let i = currentIndex; i < nextBatchEnd; i++) {
+                        let item = shuffledMovies[i];
+                        let movie = item.movie;
+                        let originalIndex = item.originalIndex;
+
+                        batchHtml += `
+                            <a href="?movie=${originalIndex}" class="horizontal-post">
+                                <div class="thumbnail-container">
+                                    <img src="${movie.thumbnail}" alt="${movie.title}" class="thumb-image" onerror="this.src='https://via.placeholder.com/320x180?text=No+Image'">
+                                </div>
+                            </a>
+                        `;
+                    }
+
+                    gridContainer.insertAdjacentHTML('beforeend', batchHtml);
+                    currentIndex = nextBatchEnd;
+
+                    if (currentIndex >= shuffledMovies.length) {
+                        loadStatus.textContent = "All movies loaded.";
+                    }
+                }
+
+                // Initial batch load
+                loadNextBatch();
+
+                // Infinite scroll listener: triggers next batch when user scrolls near the bottom
+                window.addEventListener("scroll", () => {
+                    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
+                        loadNextBatch();
+                    }
+                });
+            }
+
+            // Function to render the Watch Page view
+            function renderWatch(index) {
+                const movie = movies[index];
+                if (!movie) {
+                    document.body.classList.remove("watch-mode");
+                    container.innerHTML = `<h2 class="section-title">Movie not found</h2><a href="index.html" class="back-link">&larr; Back to Home</a>`;
+                    return;
+                }
+
+                // Add class to body to hide the site header via CSS
+                document.body.classList.add("watch-mode");
+
+                let catHtml = movie.categories.map(cat => `<span class="btn-cat">${cat}</span>`).join(" ");
+
+                container.innerHTML = `
+                    <div class="watch-container">
+                        <a href="index.html" class="back-link">&larr; Back to Home</a>
+                        <div class="movie-title-header">${movie.title}</div>
+                        <div class="post-content">
+                            ${movie.post}
+                        </div>
+                        <div class="category-buttons" style="text-align: left; margin-top: 15px;">${catHtml}</div>
+                    </div>
+                `;
+            }
+
+            // Routing logic based on query parameters
+            if (movieParam !== null && !isNaN(movieParam)) {
+                renderWatch(parseInt(movieParam));
+            } else if (showParam === "all-movies") {
+                renderAllMoviesBatched();
+            } else {
+                renderHome();
+            }
+        });
+    </script>
+</body>
+</html>

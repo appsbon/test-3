@@ -1,0 +1,365 @@
+/*
+Theme Name: Movidoz Custom
+Author: You
+Version: 1.0
+Description: Dark mode streaming theme extracted directly from Blogspot XML template.
+*/
+
+/* --- Core Theme Styles --- */
+body {
+    background-color: #141415;
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+a {
+    color: inherit;
+    text-decoration: none !important;
+}
+
+/* Wide layout to minimize empty side gaps */
+.container {
+    width: 98%;
+    max-width: 1680px;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+/* --- Header Section --- */
+.site-header {
+    width: 100%;
+    background-color: #0b0b0b;
+    border-bottom: 1px solid #1a1a1a;
+    padding: 12px 0;
+    margin-bottom: 20px;
+}
+
+.header-container {
+    width: 98%;
+    max-width: 1680px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+/* --- Logo Styling --- */
+.site-logo {
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    color: #e50914;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+}
+
+/* --- Search Box Styling --- */
+#searchbox {
+    display: flex;
+    align-items: center;
+    background-color: #1e1e1e;
+    border: 1px solid #2d2d2d;
+    border-radius: 20px;
+    padding: 3px 4px 3px 15px;
+    width: 260px;
+    margin: 0;
+}
+
+#searchbox input[type="text"] {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #cccccc;
+    font-size: 12px;
+    width: 100%;
+}
+
+#searchbox input[type="text"]::placeholder {
+    color: #777777;
+}
+
+#button-submit {
+    background-color: #e50914;
+    border: none;
+    color: #ffffff;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 11px;
+    flex-shrink: 0;
+    transition: background-color 0.2s ease;
+    margin: 0;
+}
+
+#button-submit:hover {
+    background-color: #b20710;
+}
+
+/* --- Advertisement Slots Styling --- */
+.ad-wrapper {
+    margin: 20px 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* --- Section Titles & Labels --- */
+h2.section-title, .latest-box {
+    display: block;
+    margin: 15px 0 10px 0;
+    padding: 10px 20px;
+    background-color: #141415;
+    border: 2px solid #333;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* --- YouTube-Style Grid Layout --- */
+.post-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.horizontal-post {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    text-decoration: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* YouTube Widescreen Size (320px x 180px) */
+.thumbnail-container {
+    position: relative;
+    width: 320px;
+    height: 180px;
+    overflow: hidden;
+    border: 3px solid #000;
+    border-radius: 8px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    background-color: #000;
+}
+
+.thumb-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    transition: transform 0.3s ease;
+}
+
+.thumb-image:hover {
+    transform: scale(1.05);
+}
+
+/* --- Watch Page Layout & Movie Title --- */
+.watch-container {
+    max-width: 1400px;
+    margin: 20px auto;
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+
+.movie-title-header {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #ffffff;
+}
+
+.post-content {
+    background-color: #0b0b0b;
+    border: 1px solid #1a1a1a;
+    border-radius: 8px;
+    padding: 10px;
+    overflow: hidden;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 15px;
+    color: #e50914;
+    font-weight: bold;
+    font-size: 14px;
+}
+.back-link:hover {
+    text-decoration: underline !important;
+}
+
+/* --- View All Button Section --- */
+.view-all-container {
+    text-align: right; /* Default desktop alignment */
+    margin: 25px 0 30px 0;
+    width: 100%;
+}
+
+.btn-view-all {
+    background-color: #ff0000;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
+}
+
+.btn-view-all:hover {
+    background-color: #cc0000;
+    transform: scale(1.05);
+}
+
+/* --- Category Buttons --- */
+.category-buttons {
+    margin: 15px 0;
+    text-align: center;
+}
+
+.category-buttons .btn-cat {
+    background-color: red;
+    color: white;
+    padding: 6px 14px;
+    margin: 5px 2px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 12px;
+    display: inline-block;
+}
+
+/* --- Video iFrames Desktop --- */
+.post-content iframe {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    max-height: 780px;
+    border: none;
+    display: block;
+    margin: 0 auto;
+}
+
+/* --- Footer & Disclaimer Styling --- */
+.site-footer {
+    background-color: #0b0b0b;
+    border-top: 1px solid #1a1a1a;
+    padding: 30px 0 20px 0;
+    margin-top: 40px;
+    color: #888888;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.footer-container {
+    width: 98%;
+    max-width: 1680px;
+    margin: 0 auto;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.footer-disclaimer {
+    max-width: 1000px;
+    margin: 0 auto 15px auto;
+    padding: 0 15px;
+    color: #aaaaaa;
+}
+
+.footer-contact {
+    margin-bottom: 15px;
+}
+
+.footer-contact a {
+    color: #e50914;
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: underline;
+    transition: color 0.2s ease;
+}
+
+.footer-contact a:hover {
+    color: #ff2a37;
+}
+
+.footer-copyright {
+    color: #666666;
+    font-size: 12px;
+}
+
+/* --- Responsive Video Rules --- */
+@media (max-width: 1280px) {
+    .post-content iframe {
+        height: 360px;
+        aspect-ratio: auto;
+        max-height: none;
+    }
+}
+
+/* --- Mobile Responsive Rules --- */
+@media (max-width: 768px) {
+    .post-grid {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        width: 100%;
+    }
+
+    .horizontal-post {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .thumbnail-container {
+        width: 330px;
+        height: 185px;
+        max-width: 92vw;
+        margin: 0 auto;
+    }
+
+    .view-all-container {
+        text-align: center; /* Centers the View All button on mobile screens */
+    }
+
+    .header-container {
+        flex-direction: column;
+        gap: 12px;
+        padding: 0 10px;
+    }
+    
+    .container {
+        width: 100%;
+        padding: 0 10px;
+    }
+
+    #searchbox {
+        width: 100%;
+    }
+}
